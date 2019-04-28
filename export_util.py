@@ -182,15 +182,3 @@ class ExportUtilCustomPanel(bpy.types.Panel):
         col.operator(AssignMaterialForExport.bl_idname, text="Assign Material for Export")
         col = layout.column(align=True)
         col.operator(RestoreFaceSpecificMaterial.bl_idname, text="Restore Face Specific Material")
-
-
-def register():
-    bpy.utils.register_module(__name__)
-
-
-def unregister():
-    bpy.utils.unregister_module(__name__)
-
-
-if __name__ == "__main__":
-    register()
