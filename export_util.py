@@ -143,6 +143,7 @@ def assign_material_for_export(ob, report):
     mat = bpy.data.materials.get(mat_name)
     if mat is None:
         mat = bpy.data.materials.new(name=mat_name)
+        mat.use_nodes = True
 
     mat_idx = ob.data.materials.find(mat_name)
     if mat_idx == -1:
