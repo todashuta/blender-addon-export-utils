@@ -41,6 +41,10 @@ def record_face_specific_material_in_custom_prop_layer(ob, report):
         report({"INFO"}, "Material not Used: {}".format(ob.name))
         return
 
+    if [ob.data.materials[p.material_index] for p in ob.data.polygons].count(None) > 0:
+        report({"ERROR"}, "マテリアルが割り当てられていない面があります: {}".format(ob.name))
+        return
+
     bm = bmesh.new()
     bm.from_mesh(ob.data)
 
