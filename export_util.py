@@ -44,20 +44,21 @@ def record_face_specific_material_in_custom_prop_layer(ob, report):
     bm = bmesh.new()
     bm.from_mesh(ob.data)
 
-    material_name_layer = bm.faces.layers.string.get("material_name")
-    if material_name_layer is None:
-        material_name_layer = bm.faces.layers.string.new("material_name")
+    layer_name = "material_name"
+    if layer_name not in bm.faces.layers.string:
+        bm.faces.layers.string.new(layer_name)
+    material_name_layer = bm.faces.layers.string[layer_name]
     #print("material_name_layer", material_name_layer)
 
     bm.faces.ensure_lookup_table()
-    for f in bm.faces:
-        face_material = ob.data.materials[f.material_index]
+    for face in bm.faces:
+        face_material = ob.data.materials[face.material_index]
         if face_material is None:
             matname = ""
         else:
             matname = face_material.name
         #print("matname:", matname)
-        bm.faces[f.index][material_name_layer] = matname.encode()
+        face[material_name_layer] = matname.encode()
         #print(">", f.index, f.material_index, bm.faces[f.index][material_name_layer].decode())
 
     bm.to_mesh(ob.data)
@@ -101,13 +102,13 @@ def restore_face_specific_material_from_custom_prop_layer(ob, report):
     print("material_name_layer", material_name_layer)
 
     bm.faces.ensure_lookup_table()
-    for f in bm.faces:
-        matname = bm.faces[f.index][material_name_layer].decode()
+    for face in bm.faces:
+        matname = face[material_name_layer].decode()
         idx = ob.data.materials.find(matname)
         if idx == -1:
             pass
         else:
-            f.material_index = idx
+            face.material_index = idx
 
     bm.to_mesh(ob.data)
     bm.free()
@@ -145,10 +146,9 @@ def assign_material_for_export(ob, report):
         mat = bpy.data.materials.new(name=mat_name)
         mat.use_nodes = True
 
-    mat_idx = ob.data.materials.find(mat_name)
-    if mat_idx == -1:
+    if mat_name not in ob.data.materials:
         ob.data.materials.append(mat)
-        mat_idx = ob.data.materials.find(mat_name)
+    mat_idx = ob.data.materials.find(mat_name)
 
     for poly in ob.data.polygons:
         poly.material_index = mat_idx
