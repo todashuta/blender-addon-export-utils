@@ -2,10 +2,6 @@ import bpy
 import bmesh
 
 
-bpy.types.Object.exportutil_material_name = bpy.props.StringProperty(
-        name="Material Name", default="", description="Material Name for Export")
-
-
 #class NoopOp(bpy.types.Operator):
 #    bl_idname = "object.noopop"
 #    bl_label = "noop op"
@@ -157,11 +153,11 @@ def assign_material_for_export(ob, report):
         poly.material_index = mat_idx
 
 
-class ExportUtilCustomPanel(bpy.types.Panel):
+class EXPORT_UTIL_PT_CustomPanel(bpy.types.Panel):
     bl_label = "Export Utility"
     bl_space_type = "VIEW_3D"
-    bl_region_type = "TOOLS"
-    bl_category = "Tools"
+    bl_region_type = "UI"
+    bl_category = "Misc"
     bl_context = "objectmode"
 
     @classmethod
@@ -182,3 +178,29 @@ class ExportUtilCustomPanel(bpy.types.Panel):
         col.operator(AssignMaterialForExport.bl_idname, text="Assign Material for Export")
         col = layout.column(align=True)
         col.operator(RestoreFaceSpecificMaterial.bl_idname, text="Restore Face Specific Material")
+
+
+classes = (
+        RecordFaceSpecificMaterial,
+        RestoreFaceSpecificMaterial,
+
+        AssignMaterialForExport,
+
+        EXPORT_UTIL_PT_CustomPanel,
+)
+
+
+def register():
+    for cls in classes:
+        bpy.utils.register_class(cls)
+
+    bpy.types.Object.exportutil_material_name = bpy.props.StringProperty(
+            name="Material Name", default="", description="Material Name for Export")
+
+
+def unregister():
+    if hasattr(bpy.types.Object, "exportutil_material_name"):
+        del bpy.types.Object.exportutil_material_name
+
+    for cls in reversed(classes):
+        bpy.utils.unregister_class(cls)

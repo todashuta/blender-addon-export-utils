@@ -1,9 +1,9 @@
 bl_info = {
     "name": "Export Utils",
     "author": "Toda Shuta",
-    "version": (0, 1, 0),
-    "blender": (2, 79, 0),
-    "location": "View3D > Toolshelf > Export Utility",
+    "version": (0, 1, "0-dev"),
+    "blender": (2, 93, 0),
+    "location": "View 3D > Side Bar > Misc > Export Utility",
     "description": "Utility for Export Models (Substance Painter, etc.)",
     "warning": "",
     "wiki_url": "",
@@ -22,11 +22,11 @@ import bpy
 
 
 def register():
-    bpy.utils.register_module(__name__)
+    export_util.register()
 
 
 def unregister():
-    bpy.utils.unregister_module(__name__)
+    export_util.unregister()
 
 
 if __name__ == "__main__":
