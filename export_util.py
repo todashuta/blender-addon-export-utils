@@ -1,3 +1,17 @@
+bl_info = {
+    "name": "Export Utils",
+    "author": "Toda Shuta",
+    "version": (0, 1, "0-dev"),
+    "blender": (2, 93, 0),
+    "location": "View 3D > Side Bar > Misc > Export Utility",
+    "description": "Utility for Export Models (Substance Painter, etc.)",
+    "warning": "",
+    "wiki_url": "",
+    "tracker_url": "",
+    "category": "Import-Export"
+}
+
+
 import bpy
 import bmesh
 
@@ -209,3 +223,7 @@ def unregister():
 
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
+
+
+if __name__ == "__main__":
+    register()
